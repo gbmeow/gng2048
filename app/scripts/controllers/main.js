@@ -14,4 +14,5 @@ angular.module('gng2048App')
       'AngularJS',
       'Karma'
     ];
+    this.game = [1, 2];
   });

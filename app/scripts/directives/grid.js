@@ -18,7 +18,7 @@ angular.module('gng2048App')
       '<div class="tile-container">' +
       '<div ng-repeat="accessValue in ngModel.tiles track by $index">' +
       '<div class="tile" ng-class="positionToCoordinates(accessValue.pos)">' +
-      '<h1>{{accessValue.val}}</h1></div>' +
+      '<h1>{{accessValue.pos}} - {{accessValue.val}}</h1></div>' +
       '</div>' +
       '<button ng-click="doIt()">Do it</button>' +
       '</div>',

@@ -14,10 +14,12 @@ module.exports = function (grunt) {
 
   // Automatically load required Grunt tasks
   require('jit-grunt')(grunt, {
+    pluginsRoot: 'node_modules',
     useminPrepare: 'grunt-usemin',
     ngtemplates: 'grunt-angular-templates',
     cdnify: 'grunt-google-cdn'
   });
+  //require('load-grunt-tasks')(grunt);
 
   // Configurable paths for the application
   var appConfig = {
@@ -437,7 +439,7 @@ module.exports = function (grunt) {
     karma: {
       unit: {
         configFile: 'test/karma.conf.js',
-        singleRun: true
+        autoWatch: true
       }
     }
   });

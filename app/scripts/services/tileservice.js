@@ -16,43 +16,54 @@ angular.module('gng2048App')
 
     self.consolidate = function() {
 
-      self.tiles.forEach(function(tileObj) {
-        var below = self.findMatchesAt(self.incrementRow(self.positionToCoordinates(tileObj)));
-        console.log(below);
-        if (below) {
-          self.mergeTwoTiles(tileObj, below);
+      var _array = self.tiles;
+      for (var i = 0; i <= _array.length; i++) {
+        if (_array[i] !== undefined) {
+          var below = self.findMatchesAt(self.incrementRow(self.positionToCoordinates(_array[i])));
+          if (below) {
+            self.mergeTwoTiles(_array[i], below);
+          }
         }
-      });
-
-    }
-
-    self.mergeTwoTiles = function(tile, tile1) {
-     self.tiles.splice(tile, 1);
-     self.tiles.splice(tile1, 1);
-      var newTile = {pos: tile1.pos, val: tile.val + tile1.val};
-      console.log(newTile);
-      self.tiles.push(newTile);
+      }
     }
 
     self.incrementRow = function(obj) {
-      obj.yv = obj.yv + 1;
+      obj.y++;
       return obj;
     }
 
     self.findMatchesAt = function(obj) {
-      self.tiles.forEach(function(tileObj) {
-        var pos = self.positionToCoordinates(tileObj);
-        if (pos.xv === obj.xv && pos.yv === obj.yv) {
-          return tileObj;
+      var _array = self.tiles;
+      for (var i = 0; i <= _array.length; i++) {
+        if (_array[i] !== undefined) {
+          var pos = self.positionToCoordinates(_array[i]);
+          if (pos.y === obj.y && pos.val === obj.val) {
+            return _array[i];
+          }
         }
-      });
+      }
       return false;
     }
 
-    self.positionToCoordinates = function(pos) {
-      var x = pos % 4;
-      var y = (pos - x) / 4;
-      return {xv: x, yv: y};
+
+    self.mergeTwoTiles = function(tile, tile1) {
+      var newVal = tile.val + tile1.val;
+      var newTile = {pos: tile1.pos, val: newVal};
+      self.tiles.splice(0,1);
+      self.tiles.splice(0,1);
+      self.tiles.push(newTile);
+    }
+
+
+    self.positionToCoordinates = function(obj) {
+      var xal = obj.pos % 4;
+      var yal = (obj.pos - xal) / 4;
+      return {x: xal, y: yal, val: obj.val};
+    }
+
+    self.coordinatesToPosition = function(obj) {
+      var result = (obj.y * 4) + obj.x;
+      return {pos: result, val: obj.val}
     }
 
   });

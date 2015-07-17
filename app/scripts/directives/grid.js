@@ -28,9 +28,21 @@ angular.module('gng2048App')
       },
       link: function postLink(scope, element, attrs) {
 
-        //element.on('keydown', function(event) {
-        //  keyHandler(event);
-        //});
+        var UP    = 'up',
+          RIGHT = 'right',
+          DOWN  = 'down',
+          LEFT  = 'left';
+
+        var keyboardMap = {
+          37: LEFT,
+          38: UP,
+          39: RIGHT,
+          40: DOWN
+        };
+
+        element.on('keydown', function(event) {
+          keyHandler(event);
+        });
 
         scope.positionToCoordinates = function(pos) {
           var x = pos % 4;
@@ -39,12 +51,16 @@ angular.module('gng2048App')
         }
 
         scope.doIt = function() {
-          tileService.consolidate();
+
         }
 
-        //function keyHandler(event) {
-        //  tileService.consolidate();
-        //}
+        function keyHandler(event) {
+          var key = keyboardMap[event.which];
+          if (key) {
+            tileService.consolidate(key);
+          }
+
+        }
 
       }
     };

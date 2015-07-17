@@ -15,33 +15,28 @@ describe('Service: tileService', function () {
     expect(!!tileService).toBe(true);
   });
 
-  it('should return correct position', function() {
-    var result = tileService.positionToCoordinates(tileService.tiles[0]);
-    expect(result.x).toEqual(1);
-    expect(result.y).toEqual(0);
+  it('should return the last available position based on direction -- down', function() {
+    tileService.tiles = [{pos: 1, val: 2}];
+    tileService.consolidate('down');
+    expect(tileService.newTiles[0].pos).toEqual(13);
   });
 
-  it('should return correct position', function() {
-    var result = tileService.positionToCoordinates(tileService.tiles[1]);
-    expect(result.x).toEqual(1);
-    expect(result.y).toEqual(1);
+  it('should return the last available position based on direction -- right', function() {
+    tileService.tiles = [{pos: 2, val: 2}];
+    tileService.consolidate('right');
+    expect(tileService.newTiles[0].pos).toEqual(3);
   });
 
-  it('should find matches', function() {
-    var result = tileService.findMatchesAt({y: 1, val: 2});
-    expect(result).toBeTruthy();
-
+  it('should return the last available position based on direction -- left', function() {
+    tileService.tiles = [{pos: 2, val: 2}];
+    tileService.consolidate('left');
+    expect(tileService.newTiles[0].pos).toEqual(0);
   });
 
-  it('should convert from coordinates to position', function() {
-    var result = tileService.coordinatesToPosition({x: 1, y: 1, val: 2});
-    expect(result.pos).toEqual(5);
-  });
-
-  it('should merge two tiles with the same value', function() {
-    tileService.consolidate();
-    expect(tileService.tiles.length).toEqual(1);
-    expect(tileService.tiles[0].pos).toEqual(5);
+  it('should return the last available position based on direction -- up', function() {
+    tileService.tiles = [{pos: 2, val: 2}];
+    tileService.consolidate('up');
+    expect(tileService.newTiles[0].pos).toEqual(2);
   });
 
 });

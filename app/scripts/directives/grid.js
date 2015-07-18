@@ -7,9 +7,11 @@
  * # grid
  */
 angular.module('gng2048App')
-  .directive('grid', function (tileService) {
+  .directive('grid', function (GridService) {
     return {
       template:
+      '<button ng-click="doIt(\'right\')">Right </button>' +
+      '<button ng-click="doIt(\'down\')">Down</button>' +
       '<div class="grid-container">' +
       '<div ng-repeat="accessValue in ngModel.board track by $index">' +
       '<div class="grid-cell" ng-class="positionToCoordinates(accessValue)">{{accessValue}}</div>' +
@@ -17,10 +19,9 @@ angular.module('gng2048App')
       '</div>' +
       '<div class="tile-container">' +
       '<div ng-repeat="accessValue in ngModel.tiles track by $index">' +
-      '<div class="tile" ng-class="positionToCoordinates(accessValue.pos)">' +
-      '<h1>{{accessValue.pos}} - {{accessValue.val}}</h1></div>' +
+      '<div class="tile" ng-class="generateClass(accessValue)">' +
+      '<h1>{{accessValue.value}}</h1></div>' +
       '</div>' +
-      '<button ng-click="doIt()">Do it</button>' +
       '</div>',
       restrict: 'EA',
       scope: {
@@ -40,6 +41,7 @@ angular.module('gng2048App')
           40: DOWN
         };
 
+
         element.on('keydown', function(event) {
           keyHandler(event);
         });
@@ -50,14 +52,52 @@ angular.module('gng2048App')
           return 'position-' + x + '-' + y;
         }
 
-        scope.doIt = function() {
-
+        scope.generateClass = function(obj) {
+          if (obj === null || obj === undefined) return;
+          return 'position-' + obj.x + '-' + obj.y;
         }
 
-        function keyHandler(event) {
-          var key = keyboardMap[event.which];
+        scope.doIt = function(txt) {
+          keyHandler(txt);
+        }
+
+
+        function keyHandler(key) {
+          //var key = keyboardMap[event.which] || 'right';
+          var key = 'right';
           if (key) {
-            tileService.consolidate(key);
+            var positions = GridService.traversalDirections(key);
+            positions.x.forEach(function(x) {
+              positions.y.forEach(function(y) {
+                var originalPosition = {x: x, y: y};
+                var tile = GridService.getCellAt(originalPosition);
+
+                if (tile) {
+                  var cell = GridService.calculateNextPosition(tile, key);
+                  var next = cell.next;
+
+                  if (next &&
+                      next.value === tile.value &&
+                      !next.merged) {
+
+                    //1. multiple value
+                    var val = next.value * tile.value;
+                    //2. set new tile
+                    GridService.updateValue(next, val);
+                    //3. remove old tile
+                    GridService.removeTile(tile);
+
+                    console.log('merge path completed');
+                    //GridService.moveTile(tile, cell.newPosition);
+
+                  } else {
+                    console.log('move path');
+                    GridService.moveTile(tile, cell.newPosition);
+                  }
+                }
+
+              })
+            })
           }
 
         }

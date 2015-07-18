@@ -8,7 +8,7 @@
  * Controller of the gng2048App
  */
 angular.module('gng2048App')
-  .controller('MainCtrl', function (tileService, GridService) {
+  .controller('MainCtrl', function (GridService) {
     var vm = this;
 
     //NEXT
@@ -18,8 +18,9 @@ angular.module('gng2048App')
       //2. Able to move tiles with keyboard
     function load() {
       vm.game = {};
+      GridService.buildTiles();
       vm.game.board = GridService.board.tiles;
-      vm.game.tiles = tileService.tiles;
+      vm.game.tiles = GridService.tiles;
 
     }
     load();

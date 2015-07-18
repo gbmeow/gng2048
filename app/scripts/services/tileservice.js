@@ -7,6 +7,10 @@
  * # tileService
  * Service in the gng2048App.
  */
+
+
+
+
 angular.module('gng2048App')
   .service('tileService', function (GridService) {
     // AngularJS will instantiate a singleton by calling "new" on self function

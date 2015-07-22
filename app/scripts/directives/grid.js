@@ -12,15 +12,18 @@ angular.module('gng2048App')
       template:
       '<button ng-click="doIt(\'right\')">Right </button>' +
       '<button ng-click="doIt(\'down\')">Down</button>' +
+      '<button ng-click="doIt(\'left\')">Left</button>' +
+      '<button ng-click="doIt(\'up\')">Up</button>' +
+      '<br />' +
       '<div class="grid-container">' +
       '<div ng-repeat="accessValue in ngModel.board track by $index">' +
       '<div class="grid-cell" ng-class="positionToCoordinates(accessValue)">{{accessValue}}</div>' +
       '</div>' +
       '</div>' +
       '<div class="tile-container">' +
-      '<div ng-repeat="accessValue in ngModel.tiles track by $index">' +
-      '<div class="tile" ng-class="generateClass(accessValue)">' +
-      '<h1>{{accessValue.value}}</h1></div>' +
+      '<div ng-repeat="tile in ngModel.tiles track by $index">' +
+      '<div class="tile" ng-class="generateClass(tile)">' +
+      '<h1>{{tile.value}}</h1></div>' +
       '</div>' +
       '</div>',
       restrict: 'EA',
@@ -41,10 +44,9 @@ angular.module('gng2048App')
           40: DOWN
         };
 
-
-        element.on('keydown', function(event) {
-          keyHandler(event);
-        });
+        //element.on('keydown', function(event) {
+        //  keyHandler(event);
+        //});
 
         scope.positionToCoordinates = function(pos) {
           var x = pos % 4;
@@ -64,7 +66,7 @@ angular.module('gng2048App')
 
         function keyHandler(key) {
           //var key = keyboardMap[event.which] || 'right';
-          var key = 'right';
+          //var key = 'right';
           if (key) {
             var positions = GridService.traversalDirections(key);
             positions.x.forEach(function(x) {

@@ -55,7 +55,27 @@ describe('Service: GridService', function () {
     expect(GridService.tiles[7].x).toEqual(3);
     expect(GridService.tiles[7].y).toEqual(1);
   });
-  
+
+  it('should expose next property', function() {
+    GridService.buildTiles();
+    var originalPosition = {x: 0, y: 0};
+    var tile = GridService.getCellAt(originalPosition);
+    var cell = GridService.calculateNextPosition(originalPosition, 'down');
+    var next = cell.next;
+
+    if (next && next.value === tile.value && !next.merged) {
+      var val = next.value * tile.value;
+      //2. set new tile
+      GridService.updateValue(next, val);
+      //3. remove old tile
+      GridService.removeTile(tile);
+    }
+
+    expect(GridService.tiles[4].x).toEqual(0);
+    expect(GridService.tiles[4].y).toEqual(1);
+  });
+
+
 
 
 

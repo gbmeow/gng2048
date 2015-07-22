@@ -42,12 +42,18 @@ angular.module('gng2048App')
      */
 
     self.buildTiles = function() {
+      self.setCellAt({x: 0, y: 0}, new TileModel({x: 0, y: 0}));
       self.setCellAt({x: 0, y: 1}, new TileModel({x: 0, y: 1}));
-      self.setCellAt({x: 1, y: 0}, new TileModel({x: 1, y: 0}));
     }
 
-    self.calculateNextPosition = function(cell, key) {
+    var vectors = {
+      'left': { x: -1, y: 0 },
+      'right': { x: 1, y: 0 },
+      'up': { x: 0, y: -1 },
+      'down': { x: 0, y: 1 }
+    };
 
+    self.calculateNextPosition = function(cell, key) {
 
       var vector = vectors[key];
       var previous;
@@ -58,8 +64,8 @@ angular.module('gng2048App')
           x: previous.x + vector.x,
           y: previous.y + vector.y
         };
-        //TODO Solution for while - we are 1 over on the boundry
       } while (self.withinGrid(cell) && self.cellAvailable(cell));
+
 
       return {
         newPosition: previous,
@@ -79,9 +85,8 @@ angular.module('gng2048App')
     }
 
     self.removeTile = function(tile) {
-      //var position = self.getCellAt(tile);
-      self.tiles[3] = null;
-
+      var position = _coordinatesToPosition(tile);
+      delete self.tiles[position];
     }
 
     self.moveTile = function(tile, newPosition) {
@@ -115,7 +120,7 @@ angular.module('gng2048App')
     };
 
     self.getCellAt = function (obj) {
-      var obj = self.patch(obj);
+      //var obj = self.patch(obj);
       if (self.withinGrid(obj)) {
         var xPos = _coordinatesToPosition(obj);
         return this.tiles[xPos];
@@ -159,12 +164,7 @@ angular.module('gng2048App')
     /*
     Helper functions/vars
      */
-    var vectors = {
-      'left': { x: -1, y: 0 },
-      'right': { x: 1, y: 0 },
-      'up': { x: 0, y: -1 },
-      'down': { x: 0, y: 1 }
-    };
+
 
     function getTiles() {
       var _array = [];
